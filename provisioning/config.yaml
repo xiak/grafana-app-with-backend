@@ -1,0 +1,8 @@
+data:
+  database:
+    driver: mysql
+    source: root:dangerous@tcp(127.0.0.1:3306)/test?parseTime=true
+  prometheus:
+    url: "0.0.0.0:9090"
+  file:
+    path: /tmp/test.data

@@ -1,0 +1,23 @@
+syntax = "proto3";
+
+package ads.api;
+
+// import "google/protobuf/duration.proto";
+
+option go_package = "github.com/xiak/grafana-app-with-backend/provisioning/vvault/conf;conf";
+
+message Data {
+    message Database {
+        string driver = 1;
+        string source = 2;
+    }
+    message Prometheus {
+        string url = 1;
+    }
+    message File {
+        string path = 1;
+    }
+    Database database = 1;
+    Prometheus prometheus = 2;
+    File file = 3;
+}
