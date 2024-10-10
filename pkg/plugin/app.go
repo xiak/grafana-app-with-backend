@@ -2,16 +2,16 @@ package plugin
 
 import (
 	"context"
-	"os"
-	"path/filepath"
 
-	"github.com/casbin/casbin/log"
+	"github.com/gorilla/mux"
 	"github.com/grafana/grafana-plugin-sdk-go/backend"
 	"github.com/grafana/grafana-plugin-sdk-go/backend/instancemgmt"
+	l "github.com/grafana/grafana-plugin-sdk-go/backend/log"
 	"github.com/grafana/grafana-plugin-sdk-go/backend/resource/httpadapter"
 	"github.com/xiak/grafana-app-with-backend/pkg/common/config"
 	"github.com/xiak/grafana-app-with-backend/pkg/common/config/file"
-	conf "github.com/xiak/grafana-app-with-backend/pkg/config"
+	httpex "github.com/xiak/grafana-app-with-backend/pkg/common/transport/http"
+	conf "github.com/xiak/grafana-app-with-backend/pkg/internal/config"
 )
 
 // Make sure App implements required interfaces. This is important to do
@@ -23,6 +23,10 @@ var (
 	_ instancemgmt.InstanceDisposer = (*App)(nil)
 	_ backend.CheckHealthHandler    = (*App)(nil)
 )
+
+func GetRouter(srv *httpex.Server) *mux.Router {
+	return srv.Router()
+}
 
 // App is an example app backend plugin which can respond to data queries.
 type App struct {
@@ -36,10 +40,15 @@ func NewApp(_ context.Context, _ backend.AppInstanceSettings) (instancemgmt.Inst
 	// Use a httpadapter (provided by the SDK) for resource calls. This allows us
 	// to use a *http.ServeMux for resource calls, so we can map multiple routes
 	// to CallResource without having to implement extra logic.
-	workDir, _ := os.Getwd()
+	// workDir, _ := os.Getwd()
 	c := config.New(
 		config.WithSource(
-			file.NewSource(filepath.Join(workDir, "app-with-backend", "provisioning", "config.yaml")),
+			// file.NewSource(filepath.Join(workDir, "app-with-backend", "provisioning", "config.yaml")),
+			// The path is the same as docker-compose.yaml if you use docker compose
+			// volumes:
+			// - ./dist:/var/lib/grafana/plugins/app-with-backend
+			// - ./provisioning:/etc/grafana/provisioning
+			file.NewSource("/etc/grafana/provisioning"),
 		),
 	)
 	defer c.Close()
@@ -52,13 +61,13 @@ func NewApp(_ context.Context, _ backend.AppInstanceSettings) (instancemgmt.Inst
 		panic(err)
 	}
 
-	mux, cleanup, err := wireApp(&dc, log.DefaultLogger)
+	router, cleanup, err := wireApp(&dc, l.DefaultLogger)
 	if err != nil {
 		panic(err)
 	}
 	defer cleanup()
 
-	app.CallResourceHandler = httpadapter.New(mux)
+	app.CallResourceHandler = httpadapter.New(router)
 
 	return &app, nil
 }

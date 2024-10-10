@@ -6,18 +6,18 @@
 package plugin
 
 import (
-	"net/http"
-
-	conf "github.com/xiak/grafana-app-with-backend/pkg/config"
+	"github.com/gorilla/mux"
 	"github.com/xiak/grafana-app-with-backend/pkg/internal/biz"
+	conf "github.com/xiak/grafana-app-with-backend/pkg/internal/config"
 	"github.com/xiak/grafana-app-with-backend/pkg/internal/data"
+	"github.com/xiak/grafana-app-with-backend/pkg/internal/server"
 	"github.com/xiak/grafana-app-with-backend/pkg/internal/service"
 
 	"github.com/google/wire"
-	"github.com/grafana/grafana-plugin-sdk-go/backend/log"
+	l "github.com/grafana/grafana-plugin-sdk-go/backend/log"
 )
 
 // wireApp init application.
-func wireApp(*conf.Data, log.Logger) (*http.ServeMux, func(), error) {
-	panic(wire.Build(service.ProviderSet, biz.ProviderSet, data.ProviderSet, RegisterRoutes))
+func wireApp(*conf.Data, l.Logger) (*mux.Router, func(), error) {
+	panic(wire.Build(server.ProviderSet, service.ProviderSet, biz.ProviderSet, data.ProviderSet, GetRouter))
 }

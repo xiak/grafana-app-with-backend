@@ -1,0 +1,85 @@
+# Generated with protoc-gen-openapi
+# https://github.com/google/gnostic/tree/master/cmd/protoc-gen-openapi
+
+openapi: 3.0.3
+info:
+    title: Copilot API
+    version: 0.0.1
+paths:
+    /copilot/security/user:
+        post:
+            tags:
+                - Copilot
+            operationId: Copilot_GetSecurityAbnormalUser
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/ads.service.copilot.v1.GetSecurityAbnormalUserRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/ads.service.copilot.v1.GetSecurityAbnormalUserReply'
+components:
+    schemas:
+        ads.service.copilot.v1.AbnormalUser:
+            type: object
+            properties:
+                User:
+                    type: string
+                    description: Login username
+                privilege:
+                    type: string
+                    description: Standard, Admin, Guest, others...
+                status:
+                    type: string
+                    description: Login status
+                loginMessage:
+                    type: string
+                    description: Login message
+                journal:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/ads.service.copilot.v1.Journal'
+                    description: Directory Access Logs
+                loginTime:
+                    type: string
+                    description: Login time
+                logoutTime:
+                    type: string
+                    description: Logout time
+                online:
+                    type: string
+                    description: Online time
+        ads.service.copilot.v1.GetSecurityAbnormalUserReply:
+            type: object
+            properties:
+                abnormalUser:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/ads.service.copilot.v1.AbnormalUser'
+        ads.service.copilot.v1.GetSecurityAbnormalUserRequest:
+            type: object
+            properties:
+                startTime:
+                    type: string
+                endTime:
+                    type: string
+        ads.service.copilot.v1.Journal:
+            type: object
+            properties:
+                directory:
+                    type: string
+                    description: which directory
+                status:
+                    type: string
+                    description: Directory Access Status
+                message:
+                    type: string
+                    description: Directory Access Message
+tags:
+    - name: Copilot

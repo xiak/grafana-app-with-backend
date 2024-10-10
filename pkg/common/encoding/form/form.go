@@ -23,7 +23,7 @@ var (
 )
 
 // This variable can be replaced with -ldflags like below:
-// go build "-ldflags=-X github.com/go-xiak/xiak/v2/encoding/form.tagName=form"
+// go build "-ldflags=-X github.com/xiak/grafana-app-with-backend/pkg/common/encoding/form.tagName=form"
 var tagName = "json"
 
 func init() {

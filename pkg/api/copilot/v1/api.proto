@@ -1,0 +1,81 @@
+syntax = "proto3";
+
+package ads.service.copilot.v1;
+
+import "google/api/annotations.proto";
+
+option go_package = "github.com/xiak/grafana-app-with-backend/copilot/v1;v1";
+
+
+message GetSecurityAbnormalUserRequest {
+    int64 start_time = 1;
+    int64 end_time = 2;
+}
+
+message GetSecurityAbnormalUserReply {
+    repeated AbnormalUser abnormal_user = 1;
+}
+
+message AbnormalUser {
+    // Login username
+    string User = 1;
+    // Standard, Admin, Guest, others...
+    string privilege = 2;
+    // Login status
+    string status = 3;
+    // Login message
+    string login_message = 4;
+    // Directory Access Logs
+    repeated Journal journal = 5;
+    // Login time
+    int64 login_time = 6;
+    // Logout time
+    int64 logout_time = 7;
+    // Online time
+    int64 online = 8;
+}
+
+message Journal {
+    // which directory
+	  string directory = 1;
+	  // Directory Access Status
+	  string status = 2;
+	  // Directory Access Message
+	  string message = 3;
+}
+
+message ChatCompletionsRequest {
+    // which directory
+	  string prompt = 1;
+	  // Directory Access Status
+	  string Messages = 2;
+	  // Directory Access Message
+	  string message = 3;
+}
+
+message ChatCompletionsReply {
+    // which directory
+	  string directory = 1;
+	  // Directory Access Status
+	  string status = 2;
+	  // Directory Access Message
+	  string message = 3;
+}
+
+service Copilot {
+  rpc GetSecurityAbnormalUser (GetSecurityAbnormalUserRequest) returns (GetSecurityAbnormalUserReply) {
+    option (google.api.http) = {
+      post: "/copilot/security/user"
+      body: "*"
+    };
+  }
+
+  rpc ChatCompletions (ChatCompletionsRequest) returns (ChatCompletionsReply) {
+    option (google.api.http) = {
+      post: "/copilot/chat"
+      body: "*"
+    };
+  }
+}
+
+

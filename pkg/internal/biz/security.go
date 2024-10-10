@@ -6,6 +6,7 @@ import (
 	l "github.com/grafana/grafana-plugin-sdk-go/backend/log"
 )
 
+
 type SystemSecurityRepo interface {
 	GetUserActionFromTime2Time(ctx context.Context, start int64, end int64) ([]*UserAction, error)
 }

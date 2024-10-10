@@ -6,24 +6,26 @@ import (
 	prom "github.com/prometheus/client_golang/api"
 	promAPIV1 "github.com/prometheus/client_golang/api/prometheus/v1"
 
-	conf "github.com/xiak/grafana-app-with-backend/pkg/config"
+	conf "github.com/xiak/grafana-app-with-backend/pkg/internal/config"
 )
 
 // ProviderSet is data providers.
-var ProviderSet = wire.NewSet(NewData, NewPromAPI, NewSystemSecurityRepo)
+// var ProviderSet = wire.NewSet(NewData, NewPromAPI, NewSystemSecurityRepo)
+var ProviderSet = wire.NewSet(NewData, NewSystemSecurityRepo)
 
 // Data .
 type Data struct {
 	// prometheus client
-	promAPI promAPIV1.API
-	log     l.Logger
+	// promAPI promAPIV1.API
+	log l.Logger
 }
 
 // NewData .
-func NewData(pAPI promAPIV1.API, logger l.Logger) (*Data, func(), error) {
+// func NewData(pAPI promAPIV1.API, logger l.Logger) (*Data, func(), error) {
+func NewData(logger l.Logger) (*Data, func(), error) {
 	d := &Data{
-		promAPI: pAPI,
-		log:     logger,
+		// promAPI: pAPI,
+		log: logger,
 	}
 	return d, func() {}, nil
 }
