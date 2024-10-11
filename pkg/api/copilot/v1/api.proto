@@ -44,22 +44,21 @@ message Journal {
 	  string message = 3;
 }
 
-message ChatCompletionsRequest {
-    // which directory
-	  string prompt = 1;
-	  // Directory Access Status
-	  string Messages = 2;
-	  // Directory Access Message
-	  string message = 3;
+message PromptSuggestionRequest {
+    // input text
+	  string text = 1;
 }
 
-message ChatCompletionsReply {
-    // which directory
-	  string directory = 1;
-	  // Directory Access Status
-	  string status = 2;
-	  // Directory Access Message
-	  string message = 3;
+message PromptSuggestionReply {
+    // prompt suggestion list
+	  repeated Suggestion prompts = 1;
+    // how many suggestion will be returned
+    int64 num = 2;
+}
+
+message Suggestion {
+    // prompt suggestion
+    string prompt = 1;
 }
 
 service Copilot {
@@ -70,9 +69,9 @@ service Copilot {
     };
   }
 
-  rpc ChatCompletions (ChatCompletionsRequest) returns (ChatCompletionsReply) {
+  rpc PromptSuggestion (PromptSuggestionRequest) returns (PromptSuggestionReply) {
     option (google.api.http) = {
-      post: "/copilot/chat"
+      post: "/copilot/prompt/suggestion"
       body: "*"
     };
   }

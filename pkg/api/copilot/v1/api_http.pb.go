@@ -20,14 +20,17 @@ var _ = binding.EncodeURL
 const _ = http.SupportPackageIsVersion1
 
 const OperationCopilotGetSecurityAbnormalUser = "/ads.service.copilot.v1.Copilot/GetSecurityAbnormalUser"
+const OperationCopilotPromptSuggestion = "/ads.service.copilot.v1.Copilot/PromptSuggestion"
 
 type CopilotHTTPServer interface {
 	GetSecurityAbnormalUser(context.Context, *GetSecurityAbnormalUserRequest) (*GetSecurityAbnormalUserReply, error)
+	PromptSuggestion(context.Context, *PromptSuggestionRequest) (*PromptSuggestionReply, error)
 }
 
 func RegisterCopilotHTTPServer(s *http.Server, srv CopilotHTTPServer) {
 	r := s.Route("/")
 	r.POST("/copilot/security/user", _Copilot_GetSecurityAbnormalUser0_HTTP_Handler(srv))
+	r.POST("/copilot/prompt/suggestion", _Copilot_PromptSuggestion0_HTTP_Handler(srv))
 }
 
 func _Copilot_GetSecurityAbnormalUser0_HTTP_Handler(srv CopilotHTTPServer) func(ctx http.Context) error {
@@ -48,6 +51,28 @@ func _Copilot_GetSecurityAbnormalUser0_HTTP_Handler(srv CopilotHTTPServer) func(
 			return err
 		}
 		reply := out.(*GetSecurityAbnormalUserReply)
+		return ctx.Result(200, reply)
+	}
+}
+
+func _Copilot_PromptSuggestion0_HTTP_Handler(srv CopilotHTTPServer) func(ctx http.Context) error {
+	return func(ctx http.Context) error {
+		var in PromptSuggestionRequest
+		if err := ctx.Bind(&in); err != nil {
+			return err
+		}
+		if err := ctx.BindQuery(&in); err != nil {
+			return err
+		}
+		http.SetOperation(ctx, OperationCopilotPromptSuggestion)
+		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
+			return srv.PromptSuggestion(ctx, req.(*PromptSuggestionRequest))
+		})
+		out, err := h(ctx, &in)
+		if err != nil {
+			return err
+		}
+		reply := out.(*PromptSuggestionReply)
 		return ctx.Result(200, reply)
 	}
 }

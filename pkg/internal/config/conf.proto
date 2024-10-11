@@ -21,3 +21,11 @@ message Data {
     Prometheus prometheus = 2;
     File file = 3;
 }
+
+message Chat {
+    message Prompts {
+        int64 retrieve = 1;
+        repeated string keywords = 2;
+    }
+    Prompts prompts = 1;
+}

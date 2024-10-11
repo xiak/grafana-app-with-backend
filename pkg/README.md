@@ -96,7 +96,7 @@ cd <project-root-dir>/pkg/api/copilot/v1 && protoc --proto_path=<project-root-di
 
 Some files will be generated: `api_http.pb.go`, `api.pb.go`, `openapi.yaml`
 
-The above command has been implemented at MAKEFILE
+The above command has been implemented at MAKEFILE, you can execute command `make api`
 
 ### 2. Implementing your interface
 

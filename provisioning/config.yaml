@@ -6,3 +6,12 @@ data:
     url: "0.0.0.0:9090"
   file:
     path: /tmp/test.data
+
+chat:
+  prompts:
+    retrieve: 10
+    keywords:
+      - "2024年9月3日有无安全异常？"
+      - "今日vvault运行有无异常情况？"
+      - "我们当前APP访问主机资源情况怎么样？"
+

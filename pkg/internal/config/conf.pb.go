@@ -83,6 +83,53 @@ func (x *Data) GetFile() *Data_File {
 	return nil
 }
 
+type Chat struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Prompts *Chat_Prompts `protobuf:"bytes,1,opt,name=prompts,proto3" json:"prompts,omitempty"`
+}
+
+func (x *Chat) Reset() {
+	*x = Chat{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_conf_proto_msgTypes[1]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *Chat) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*Chat) ProtoMessage() {}
+
+func (x *Chat) ProtoReflect() protoreflect.Message {
+	mi := &file_conf_proto_msgTypes[1]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use Chat.ProtoReflect.Descriptor instead.
+func (*Chat) Descriptor() ([]byte, []int) {
+	return file_conf_proto_rawDescGZIP(), []int{1}
+}
+
+func (x *Chat) GetPrompts() *Chat_Prompts {
+	if x != nil {
+		return x.Prompts
+	}
+	return nil
+}
+
 type Data_Database struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
@@ -95,7 +142,7 @@ type Data_Database struct {
 func (x *Data_Database) Reset() {
 	*x = Data_Database{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_conf_proto_msgTypes[1]
+		mi := &file_conf_proto_msgTypes[2]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -108,7 +155,7 @@ func (x *Data_Database) String() string {
 func (*Data_Database) ProtoMessage() {}
 
 func (x *Data_Database) ProtoReflect() protoreflect.Message {
-	mi := &file_conf_proto_msgTypes[1]
+	mi := &file_conf_proto_msgTypes[2]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -149,7 +196,7 @@ type Data_Prometheus struct {
 func (x *Data_Prometheus) Reset() {
 	*x = Data_Prometheus{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_conf_proto_msgTypes[2]
+		mi := &file_conf_proto_msgTypes[3]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -162,7 +209,7 @@ func (x *Data_Prometheus) String() string {
 func (*Data_Prometheus) ProtoMessage() {}
 
 func (x *Data_Prometheus) ProtoReflect() protoreflect.Message {
-	mi := &file_conf_proto_msgTypes[2]
+	mi := &file_conf_proto_msgTypes[3]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -196,7 +243,7 @@ type Data_File struct {
 func (x *Data_File) Reset() {
 	*x = Data_File{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_conf_proto_msgTypes[3]
+		mi := &file_conf_proto_msgTypes[4]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -209,7 +256,7 @@ func (x *Data_File) String() string {
 func (*Data_File) ProtoMessage() {}
 
 func (x *Data_File) ProtoReflect() protoreflect.Message {
-	mi := &file_conf_proto_msgTypes[3]
+	mi := &file_conf_proto_msgTypes[4]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -230,6 +277,61 @@ func (x *Data_File) GetPath() string {
 		return x.Path
 	}
 	return ""
+}
+
+type Chat_Prompts struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Retrieve int64    `protobuf:"varint,1,opt,name=retrieve,proto3" json:"retrieve,omitempty"`
+	Keywords []string `protobuf:"bytes,2,rep,name=keywords,proto3" json:"keywords,omitempty"`
+}
+
+func (x *Chat_Prompts) Reset() {
+	*x = Chat_Prompts{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_conf_proto_msgTypes[5]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *Chat_Prompts) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*Chat_Prompts) ProtoMessage() {}
+
+func (x *Chat_Prompts) ProtoReflect() protoreflect.Message {
+	mi := &file_conf_proto_msgTypes[5]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use Chat_Prompts.ProtoReflect.Descriptor instead.
+func (*Chat_Prompts) Descriptor() ([]byte, []int) {
+	return file_conf_proto_rawDescGZIP(), []int{1, 0}
+}
+
+func (x *Chat_Prompts) GetRetrieve() int64 {
+	if x != nil {
+		return x.Retrieve
+	}
+	return 0
+}
+
+func (x *Chat_Prompts) GetKeywords() []string {
+	if x != nil {
+		return x.Keywords
+	}
+	return nil
 }
 
 var File_conf_proto protoreflect.FileDescriptor
@@ -253,12 +355,20 @@ var file_conf_proto_rawDesc = []byte{
 	0x1a, 0x1e, 0x0a, 0x0a, 0x50, 0x72, 0x6f, 0x6d, 0x65, 0x74, 0x68, 0x65, 0x75, 0x73, 0x12, 0x10,
 	0x0a, 0x03, 0x75, 0x72, 0x6c, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x03, 0x75, 0x72, 0x6c,
 	0x1a, 0x1a, 0x0a, 0x04, 0x46, 0x69, 0x6c, 0x65, 0x12, 0x12, 0x0a, 0x04, 0x70, 0x61, 0x74, 0x68,
-	0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x04, 0x70, 0x61, 0x74, 0x68, 0x42, 0x48, 0x5a, 0x46,
-	0x67, 0x69, 0x74, 0x68, 0x75, 0x62, 0x2e, 0x63, 0x6f, 0x6d, 0x2f, 0x78, 0x69, 0x61, 0x6b, 0x2f,
-	0x67, 0x72, 0x61, 0x66, 0x61, 0x6e, 0x61, 0x2d, 0x61, 0x70, 0x70, 0x2d, 0x77, 0x69, 0x74, 0x68,
-	0x2d, 0x62, 0x61, 0x63, 0x6b, 0x65, 0x6e, 0x64, 0x2f, 0x70, 0x72, 0x6f, 0x76, 0x69, 0x73, 0x69,
-	0x6f, 0x6e, 0x69, 0x6e, 0x67, 0x2f, 0x76, 0x76, 0x61, 0x75, 0x6c, 0x74, 0x2f, 0x63, 0x6f, 0x6e,
-	0x66, 0x3b, 0x63, 0x6f, 0x6e, 0x66, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
+	0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x04, 0x70, 0x61, 0x74, 0x68, 0x22, 0x7a, 0x0a, 0x04,
+	0x43, 0x68, 0x61, 0x74, 0x12, 0x2f, 0x0a, 0x07, 0x70, 0x72, 0x6f, 0x6d, 0x70, 0x74, 0x73, 0x18,
+	0x01, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x15, 0x2e, 0x61, 0x64, 0x73, 0x2e, 0x61, 0x70, 0x69, 0x2e,
+	0x43, 0x68, 0x61, 0x74, 0x2e, 0x50, 0x72, 0x6f, 0x6d, 0x70, 0x74, 0x73, 0x52, 0x07, 0x70, 0x72,
+	0x6f, 0x6d, 0x70, 0x74, 0x73, 0x1a, 0x41, 0x0a, 0x07, 0x50, 0x72, 0x6f, 0x6d, 0x70, 0x74, 0x73,
+	0x12, 0x1a, 0x0a, 0x08, 0x72, 0x65, 0x74, 0x72, 0x69, 0x65, 0x76, 0x65, 0x18, 0x01, 0x20, 0x01,
+	0x28, 0x03, 0x52, 0x08, 0x72, 0x65, 0x74, 0x72, 0x69, 0x65, 0x76, 0x65, 0x12, 0x1a, 0x0a, 0x08,
+	0x6b, 0x65, 0x79, 0x77, 0x6f, 0x72, 0x64, 0x73, 0x18, 0x02, 0x20, 0x03, 0x28, 0x09, 0x52, 0x08,
+	0x6b, 0x65, 0x79, 0x77, 0x6f, 0x72, 0x64, 0x73, 0x42, 0x48, 0x5a, 0x46, 0x67, 0x69, 0x74, 0x68,
+	0x75, 0x62, 0x2e, 0x63, 0x6f, 0x6d, 0x2f, 0x78, 0x69, 0x61, 0x6b, 0x2f, 0x67, 0x72, 0x61, 0x66,
+	0x61, 0x6e, 0x61, 0x2d, 0x61, 0x70, 0x70, 0x2d, 0x77, 0x69, 0x74, 0x68, 0x2d, 0x62, 0x61, 0x63,
+	0x6b, 0x65, 0x6e, 0x64, 0x2f, 0x70, 0x72, 0x6f, 0x76, 0x69, 0x73, 0x69, 0x6f, 0x6e, 0x69, 0x6e,
+	0x67, 0x2f, 0x76, 0x76, 0x61, 0x75, 0x6c, 0x74, 0x2f, 0x63, 0x6f, 0x6e, 0x66, 0x3b, 0x63, 0x6f,
+	0x6e, 0x66, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
 }
 
 var (
@@ -273,22 +383,25 @@ func file_conf_proto_rawDescGZIP() []byte {
 	return file_conf_proto_rawDescData
 }
 
-var file_conf_proto_msgTypes = make([]protoimpl.MessageInfo, 4)
+var file_conf_proto_msgTypes = make([]protoimpl.MessageInfo, 6)
 var file_conf_proto_goTypes = []any{
 	(*Data)(nil),            // 0: ads.api.Data
-	(*Data_Database)(nil),   // 1: ads.api.Data.Database
-	(*Data_Prometheus)(nil), // 2: ads.api.Data.Prometheus
-	(*Data_File)(nil),       // 3: ads.api.Data.File
+	(*Chat)(nil),            // 1: ads.api.Chat
+	(*Data_Database)(nil),   // 2: ads.api.Data.Database
+	(*Data_Prometheus)(nil), // 3: ads.api.Data.Prometheus
+	(*Data_File)(nil),       // 4: ads.api.Data.File
+	(*Chat_Prompts)(nil),    // 5: ads.api.Chat.Prompts
 }
 var file_conf_proto_depIdxs = []int32{
-	1, // 0: ads.api.Data.database:type_name -> ads.api.Data.Database
-	2, // 1: ads.api.Data.prometheus:type_name -> ads.api.Data.Prometheus
-	3, // 2: ads.api.Data.file:type_name -> ads.api.Data.File
-	3, // [3:3] is the sub-list for method output_type
-	3, // [3:3] is the sub-list for method input_type
-	3, // [3:3] is the sub-list for extension type_name
-	3, // [3:3] is the sub-list for extension extendee
-	0, // [0:3] is the sub-list for field type_name
+	2, // 0: ads.api.Data.database:type_name -> ads.api.Data.Database
+	3, // 1: ads.api.Data.prometheus:type_name -> ads.api.Data.Prometheus
+	4, // 2: ads.api.Data.file:type_name -> ads.api.Data.File
+	5, // 3: ads.api.Chat.prompts:type_name -> ads.api.Chat.Prompts
+	4, // [4:4] is the sub-list for method output_type
+	4, // [4:4] is the sub-list for method input_type
+	4, // [4:4] is the sub-list for extension type_name
+	4, // [4:4] is the sub-list for extension extendee
+	0, // [0:4] is the sub-list for field type_name
 }
 
 func init() { file_conf_proto_init() }
@@ -310,7 +423,7 @@ func file_conf_proto_init() {
 			}
 		}
 		file_conf_proto_msgTypes[1].Exporter = func(v any, i int) any {
-			switch v := v.(*Data_Database); i {
+			switch v := v.(*Chat); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -322,7 +435,7 @@ func file_conf_proto_init() {
 			}
 		}
 		file_conf_proto_msgTypes[2].Exporter = func(v any, i int) any {
-			switch v := v.(*Data_Prometheus); i {
+			switch v := v.(*Data_Database); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -334,7 +447,31 @@ func file_conf_proto_init() {
 			}
 		}
 		file_conf_proto_msgTypes[3].Exporter = func(v any, i int) any {
+			switch v := v.(*Data_Prometheus); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_conf_proto_msgTypes[4].Exporter = func(v any, i int) any {
 			switch v := v.(*Data_File); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_conf_proto_msgTypes[5].Exporter = func(v any, i int) any {
+			switch v := v.(*Chat_Prompts); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -352,7 +489,7 @@ func file_conf_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: file_conf_proto_rawDesc,
 			NumEnums:      0,
-			NumMessages:   4,
+			NumMessages:   6,
 			NumExtensions: 0,
 			NumServices:   0,
 		},

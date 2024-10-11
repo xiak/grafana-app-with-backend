@@ -8,7 +8,7 @@ import (
 )
 
 // NewHTTPServer new an HTTP server.
-func NewHTTPServer(logger l.Logger, obs *service.ObservabilityService) *http.Server {
+func NewHTTPServer(logger l.Logger, obs *service.CopilotService) *http.Server {
 	var opts = []http.ServerOption{
 		http.Middleware(),
 	}

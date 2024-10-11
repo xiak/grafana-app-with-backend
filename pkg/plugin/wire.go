@@ -8,7 +8,7 @@ package plugin
 import (
 	"github.com/gorilla/mux"
 	"github.com/xiak/grafana-app-with-backend/pkg/internal/biz"
-	conf "github.com/xiak/grafana-app-with-backend/pkg/internal/config"
+	cfg "github.com/xiak/grafana-app-with-backend/pkg/internal/config"
 	"github.com/xiak/grafana-app-with-backend/pkg/internal/data"
 	"github.com/xiak/grafana-app-with-backend/pkg/internal/server"
 	"github.com/xiak/grafana-app-with-backend/pkg/internal/service"
@@ -18,6 +18,6 @@ import (
 )
 
 // wireApp init application.
-func wireApp(*conf.Data, l.Logger) (*mux.Router, func(), error) {
+func wireApp(*cfg.Data, *cfg.Chat, l.Logger) (*mux.Router, func(), error) {
 	panic(wire.Build(server.ProviderSet, service.ProviderSet, biz.ProviderSet, data.ProviderSet, GetRouter))
 }

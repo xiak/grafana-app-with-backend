@@ -6,6 +6,24 @@ info:
     title: Copilot API
     version: 0.0.1
 paths:
+    /copilot/prompt/suggestion:
+        post:
+            tags:
+                - Copilot
+            operationId: Copilot_PromptSuggestion
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/ads.service.copilot.v1.PromptSuggestionRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/ads.service.copilot.v1.PromptSuggestionReply'
     /copilot/security/user:
         post:
             tags:
@@ -81,5 +99,28 @@ components:
                 message:
                     type: string
                     description: Directory Access Message
+        ads.service.copilot.v1.PromptSuggestionReply:
+            type: object
+            properties:
+                prompts:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/ads.service.copilot.v1.Suggestion'
+                    description: prompt suggestion list
+                num:
+                    type: string
+                    description: how many suggestion will be returned
+        ads.service.copilot.v1.PromptSuggestionRequest:
+            type: object
+            properties:
+                text:
+                    type: string
+                    description: input text
+        ads.service.copilot.v1.Suggestion:
+            type: object
+            properties:
+                prompt:
+                    type: string
+                    description: prompt suggestion
 tags:
     - name: Copilot

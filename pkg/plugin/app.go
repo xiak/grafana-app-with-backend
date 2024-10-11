@@ -61,7 +61,11 @@ func NewApp(_ context.Context, _ backend.AppInstanceSettings) (instancemgmt.Inst
 		panic(err)
 	}
 
-	router, cleanup, err := wireApp(&dc, l.DefaultLogger)
+	var cc conf.Chat
+	if err := c.Scan(&cc); err != nil {
+		panic(err)
+	}
+	router, cleanup, err := wireApp(&dc, &cc, l.DefaultLogger)
 	if err != nil {
 		panic(err)
 	}
