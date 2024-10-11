@@ -57,9 +57,10 @@ func NewChatRepo(data *Data, logger l.Logger) biz.ChatRepo {
 }
 
 func (r *chatRepo) GetChatPromptsFromText(ctx context.Context, text string) ([]*biz.Propmpt, error) {
-	ps := make([]*biz.Propmpt, r.prompts.Length())
+	ps := make([]*biz.Propmpt, 0)
 	for _, p := range r.prompts.Find(text) {
 		ps = append(ps, &biz.Propmpt{Text: p})
 	}
+	// r.log.Error("--->", ps)
 	return ps, nil
 }

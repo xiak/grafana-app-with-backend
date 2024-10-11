@@ -36,6 +36,7 @@ func (s *CopilotService) GetSecurityAbnormalUser(ctx context.Context, req *v1.Ge
 		})
 	}
 	return &v1.GetSecurityAbnormalUserReply{
+		Domain:       "system_safety",
 		AbnormalUser: au,
 	}, nil
 }

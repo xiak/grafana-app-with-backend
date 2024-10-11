@@ -11,6 +11,7 @@ type Keywords interface {
 	AddRaw(keywords []string)
 	Remove(keyword string)
 	Find(input string) []string
+	List() []string
 	Length() int
 }
 
@@ -71,18 +72,35 @@ func (kl *KeywordList) AddRaw(keywords []string) {
 
 // Find some string from keywords list
 func (kl *KeywordList) Find(input string) []string {
+	if input == "" {
+		return nil
+	}
 	kl.mutex.Lock()
 	defer kl.mutex.Unlock()
+
 	var recommendations []string
-	var cnt int64 = 0
+	cnt := 0
 	for e := kl.keywords.Front(); e != nil; e = e.Next() {
 		keyword := e.Value.(string)
-		if cnt < kl.opts.retrieve && strings.Contains(keyword, input) {
+		if cnt < int(kl.opts.retrieve) && strings.Contains(keyword, input) {
 			recommendations = append(recommendations, keyword)
 			cnt++
 		}
+		if cnt >= int(kl.opts.retrieve) {
+			break
+		}
 	}
 	return recommendations
+}
+
+func (kl *KeywordList) List() []string {
+	kl.mutex.Lock()
+	defer kl.mutex.Unlock()
+	var allKeywords []string
+	for e := kl.keywords.Front(); e != nil; e = e.Next() {
+		allKeywords = append(allKeywords, e.Value.(string))
+	}
+	return allKeywords
 }
 
 // Remove a string from keywords list

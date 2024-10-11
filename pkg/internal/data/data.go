@@ -3,20 +3,19 @@ package data
 import (
 	"github.com/google/wire"
 	l "github.com/grafana/grafana-plugin-sdk-go/backend/log"
-	prom "github.com/prometheus/client_golang/api"
-	promAPIV1 "github.com/prometheus/client_golang/api/prometheus/v1"
 
 	cfg "github.com/xiak/grafana-app-with-backend/pkg/internal/config"
 )
 
 // ProviderSet is data providers.
 // var ProviderSet = wire.NewSet(NewData, NewPromAPI, NewSystemSecurityRepo)
-var ProviderSet = wire.NewSet(NewData, NewSystemSecurityRepo, NewChatRepo)
+var ProviderSet = wire.NewSet(NewData, NewSystemSecurityRepo, NewChatRepo, NewHostActivityRepo, NewHostStateRepo, NewRagRepo)
 
 // Data .
 type Data struct {
-	data cfg.Data
-	chat cfg.Chat
+	data *cfg.Data
+	chat *cfg.Chat
+	rag  *cfg.Rag
 	// prometheus client
 	// promAPI promAPIV1.API
 	log l.Logger
@@ -24,10 +23,11 @@ type Data struct {
 
 // NewData .
 // func NewData(pAPI promAPIV1.API, logger l.Logger) (*Data, func(), error) {
-func NewData(data cfg.Data, chat cfg.Chat, logger l.Logger) (*Data, func(), error) {
+func NewData(data *cfg.Data, chat *cfg.Chat, rag *cfg.Rag, logger l.Logger) (*Data, func(), error) {
 	d := &Data{
 		data: data,
 		chat: chat,
+		rag:  rag,
 		// promAPI: pAPI,
 		log: logger,
 	}
@@ -40,18 +40,18 @@ func NewData(data cfg.Data, chat cfg.Chat, logger l.Logger) (*Data, func(), erro
 //	api := NewPromAPI(conf, logger)
 //	query := `node_cpu_seconds_total`
 //	result, warnings, err := api.Query(context.Background(), query, time.Now())
-func NewPromAPI(conf *cfg.Data, logger l.Logger) promAPIV1.API {
-	promClient, err := prom.NewClient(
-		prom.Config{
-			Address: conf.Prometheus.Url,
-		},
-	)
+// func NewPromAPI(conf *cfg.Data, logger l.Logger) promAPIV1.API {
+// 	promClient, err := prom.NewClient(
+// 		prom.Config{
+// 			Address: conf.Prometheus.Url,
+// 		},
+// 	)
 
-	if err != nil {
-		logger.Error("init prometheus client failed! %s", err)
-		panic(err)
-	}
+// 	if err != nil {
+// 		logger.Error("init prometheus client failed! %s", err)
+// 		panic(err)
+// 	}
 
-	return promAPIV1.NewAPI(promClient)
+// 	return promAPIV1.NewAPI(promClient)
 
-}
+// }

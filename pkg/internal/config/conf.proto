@@ -6,6 +6,12 @@ package ads.api;
 
 option go_package = "github.com/xiak/grafana-app-with-backend/provisioning/vvault/conf;conf";
 
+message Bootstrap {
+  Data data = 1;
+  Chat chat = 2;
+  Rag  rag = 3;
+}
+
 message Data {
     message Database {
         string driver = 1;
@@ -26,6 +32,13 @@ message Chat {
     message Prompts {
         int64 retrieve = 1;
         repeated string keywords = 2;
+    }
+    Prompts prompts = 1;
+}
+
+message Rag {
+    message Prompts {
+        repeated string keywords = 1;
     }
     Prompts prompts = 1;
 }

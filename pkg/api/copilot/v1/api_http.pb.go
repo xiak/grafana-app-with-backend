@@ -19,18 +19,49 @@ var _ = binding.EncodeURL
 
 const _ = http.SupportPackageIsVersion1
 
+const OperationCopilotGetHostsActivity = "/ads.service.copilot.v1.Copilot/GetHostsActivity"
+const OperationCopilotGetHostsState = "/ads.service.copilot.v1.Copilot/GetHostsState"
+const OperationCopilotGetRagKeywords = "/ads.service.copilot.v1.Copilot/GetRagKeywords"
 const OperationCopilotGetSecurityAbnormalUser = "/ads.service.copilot.v1.Copilot/GetSecurityAbnormalUser"
 const OperationCopilotPromptSuggestion = "/ads.service.copilot.v1.Copilot/PromptSuggestion"
 
 type CopilotHTTPServer interface {
+	GetHostsActivity(context.Context, *GetHostsActivityRequest) (*GetHostsActivityReply, error)
+	GetHostsState(context.Context, *GetHostsStateRequest) (*GetHostsStateReply, error)
+	GetRagKeywords(context.Context, *GetRagKeywordsRequest) (*GetRagKeywordsReply, error)
 	GetSecurityAbnormalUser(context.Context, *GetSecurityAbnormalUserRequest) (*GetSecurityAbnormalUserReply, error)
 	PromptSuggestion(context.Context, *PromptSuggestionRequest) (*PromptSuggestionReply, error)
 }
 
 func RegisterCopilotHTTPServer(s *http.Server, srv CopilotHTTPServer) {
 	r := s.Route("/")
-	r.POST("/copilot/security/user", _Copilot_GetSecurityAbnormalUser0_HTTP_Handler(srv))
 	r.POST("/copilot/prompt/suggestion", _Copilot_PromptSuggestion0_HTTP_Handler(srv))
+	r.POST("/copilot/security/user", _Copilot_GetSecurityAbnormalUser0_HTTP_Handler(srv))
+	r.POST("/copilot/obs/hosts/state", _Copilot_GetHostsState0_HTTP_Handler(srv))
+	r.POST("/copilot/obs/hosts/activity", _Copilot_GetHostsActivity0_HTTP_Handler(srv))
+	r.POST("/copilot/rag/search/keyword", _Copilot_GetRagKeywords0_HTTP_Handler(srv))
+}
+
+func _Copilot_PromptSuggestion0_HTTP_Handler(srv CopilotHTTPServer) func(ctx http.Context) error {
+	return func(ctx http.Context) error {
+		var in PromptSuggestionRequest
+		if err := ctx.Bind(&in); err != nil {
+			return err
+		}
+		if err := ctx.BindQuery(&in); err != nil {
+			return err
+		}
+		http.SetOperation(ctx, OperationCopilotPromptSuggestion)
+		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
+			return srv.PromptSuggestion(ctx, req.(*PromptSuggestionRequest))
+		})
+		out, err := h(ctx, &in)
+		if err != nil {
+			return err
+		}
+		reply := out.(*PromptSuggestionReply)
+		return ctx.Result(200, reply)
+	}
 }
 
 func _Copilot_GetSecurityAbnormalUser0_HTTP_Handler(srv CopilotHTTPServer) func(ctx http.Context) error {
@@ -55,24 +86,68 @@ func _Copilot_GetSecurityAbnormalUser0_HTTP_Handler(srv CopilotHTTPServer) func(
 	}
 }
 
-func _Copilot_PromptSuggestion0_HTTP_Handler(srv CopilotHTTPServer) func(ctx http.Context) error {
+func _Copilot_GetHostsState0_HTTP_Handler(srv CopilotHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
-		var in PromptSuggestionRequest
+		var in GetHostsStateRequest
 		if err := ctx.Bind(&in); err != nil {
 			return err
 		}
 		if err := ctx.BindQuery(&in); err != nil {
 			return err
 		}
-		http.SetOperation(ctx, OperationCopilotPromptSuggestion)
+		http.SetOperation(ctx, OperationCopilotGetHostsState)
 		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
-			return srv.PromptSuggestion(ctx, req.(*PromptSuggestionRequest))
+			return srv.GetHostsState(ctx, req.(*GetHostsStateRequest))
 		})
 		out, err := h(ctx, &in)
 		if err != nil {
 			return err
 		}
-		reply := out.(*PromptSuggestionReply)
+		reply := out.(*GetHostsStateReply)
+		return ctx.Result(200, reply)
+	}
+}
+
+func _Copilot_GetHostsActivity0_HTTP_Handler(srv CopilotHTTPServer) func(ctx http.Context) error {
+	return func(ctx http.Context) error {
+		var in GetHostsActivityRequest
+		if err := ctx.Bind(&in); err != nil {
+			return err
+		}
+		if err := ctx.BindQuery(&in); err != nil {
+			return err
+		}
+		http.SetOperation(ctx, OperationCopilotGetHostsActivity)
+		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
+			return srv.GetHostsActivity(ctx, req.(*GetHostsActivityRequest))
+		})
+		out, err := h(ctx, &in)
+		if err != nil {
+			return err
+		}
+		reply := out.(*GetHostsActivityReply)
+		return ctx.Result(200, reply)
+	}
+}
+
+func _Copilot_GetRagKeywords0_HTTP_Handler(srv CopilotHTTPServer) func(ctx http.Context) error {
+	return func(ctx http.Context) error {
+		var in GetRagKeywordsRequest
+		if err := ctx.Bind(&in); err != nil {
+			return err
+		}
+		if err := ctx.BindQuery(&in); err != nil {
+			return err
+		}
+		http.SetOperation(ctx, OperationCopilotGetRagKeywords)
+		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
+			return srv.GetRagKeywords(ctx, req.(*GetRagKeywordsRequest))
+		})
+		out, err := h(ctx, &in)
+		if err != nil {
+			return err
+		}
+		reply := out.(*GetRagKeywordsReply)
 		return ctx.Result(200, reply)
 	}
 }

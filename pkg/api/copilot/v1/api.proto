@@ -6,14 +6,15 @@ import "google/api/annotations.proto";
 
 option go_package = "github.com/xiak/grafana-app-with-backend/copilot/v1;v1";
 
-
+// GetSecurityAbnormalUser
 message GetSecurityAbnormalUserRequest {
     int64 start_time = 1;
     int64 end_time = 2;
 }
 
 message GetSecurityAbnormalUserReply {
-    repeated AbnormalUser abnormal_user = 1;
+    string domain = 1;
+    repeated AbnormalUser abnormal_user = 2;
 }
 
 message AbnormalUser {
@@ -44,6 +45,7 @@ message Journal {
 	  string message = 3;
 }
 
+// PromptSuggestion
 message PromptSuggestionRequest {
     // input text
 	  string text = 1;
@@ -61,7 +63,63 @@ message Suggestion {
     string prompt = 1;
 }
 
+// GetHostsState
+message GetHostsStateRequest {
+    int64 start_time = 1;
+    int64 end_time = 2;
+}
+
+message GetHostsStateReply {
+    string domain = 1;
+    repeated HostState hosts_state = 2;
+}
+
+message HostState {
+    string record_id = 1;
+    string timestamp = 2;
+    string application = 3;
+    string host = 4;
+    string operation = 5;
+    int64 avg_op_time = 6;
+}
+
+// GetHostsActivity
+message GetHostsActivityRequest {
+    int64 start_time = 1;
+    int64 end_time = 2;
+}
+
+message GetHostsActivityReply {
+    string domain = 1;
+    repeated HostActivity hosts_activity = 2;
+}
+
+message HostActivity {
+    string record_id = 1;
+    string timestamp = 2;
+    int64 host_num = 3;
+    int64 host_activity_num = 4;
+    int64 host_idle_num = 5;
+    string host_activity_ips = 6;
+}
+
+//  GetRagKeywords
+message GetRagKeywordsRequest {
+    string text = 1;
+}
+
+message GetRagKeywordsReply {
+    repeated string keywords = 1;
+}
+
 service Copilot {
+  rpc PromptSuggestion (PromptSuggestionRequest) returns (PromptSuggestionReply) {
+    option (google.api.http) = {
+      post: "/copilot/prompt/suggestion"
+      body: "*"
+    };
+  }
+
   rpc GetSecurityAbnormalUser (GetSecurityAbnormalUserRequest) returns (GetSecurityAbnormalUserReply) {
     option (google.api.http) = {
       post: "/copilot/security/user"
@@ -69,9 +127,23 @@ service Copilot {
     };
   }
 
-  rpc PromptSuggestion (PromptSuggestionRequest) returns (PromptSuggestionReply) {
+  rpc GetHostsState (GetHostsStateRequest) returns (GetHostsStateReply) {
     option (google.api.http) = {
-      post: "/copilot/prompt/suggestion"
+      post: "/copilot/obs/hosts/state"
+      body: "*"
+    };
+  }
+
+  rpc GetHostsActivity (GetHostsActivityRequest) returns (GetHostsActivityReply) {
+    option (google.api.http) = {
+      post: "/copilot/obs/hosts/activity"
+      body: "*"
+    };
+  }
+
+  rpc GetRagKeywords (GetRagKeywordsRequest) returns (GetRagKeywordsReply) {
+    option (google.api.http) = {
+      post: "/copilot/rag/search/keyword"
       body: "*"
     };
   }

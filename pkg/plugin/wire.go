@@ -18,6 +18,6 @@ import (
 )
 
 // wireApp init application.
-func wireApp(*cfg.Data, *cfg.Chat, l.Logger) (*mux.Router, func(), error) {
+func wireApp(*cfg.Data, *cfg.Chat, *cfg.Rag, l.Logger) (*mux.Router, func(), error) {
 	panic(wire.Build(server.ProviderSet, service.ProviderSet, biz.ProviderSet, data.ProviderSet, GetRouter))
 }

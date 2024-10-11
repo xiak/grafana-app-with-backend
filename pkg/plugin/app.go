@@ -2,6 +2,7 @@ package plugin
 
 import (
 	"context"
+	"os"
 
 	"github.com/gorilla/mux"
 	"github.com/grafana/grafana-plugin-sdk-go/backend"
@@ -36,38 +37,36 @@ type App struct {
 // NewApp creates a new example *App instance.
 func NewApp(_ context.Context, _ backend.AppInstanceSettings) (instancemgmt.Instance, error) {
 	var app App
+	logger := l.DefaultLogger
+	configFile := "/etc/grafana/provisioning/config.yaml"
 
-	// Use a httpadapter (provided by the SDK) for resource calls. This allows us
-	// to use a *http.ServeMux for resource calls, so we can map multiple routes
-	// to CallResource without having to implement extra logic.
-	// workDir, _ := os.Getwd()
 	c := config.New(
 		config.WithSource(
-			// file.NewSource(filepath.Join(workDir, "app-with-backend", "provisioning", "config.yaml")),
 			// The path is the same as docker-compose.yaml if you use docker compose
 			// volumes:
 			// - ./dist:/var/lib/grafana/plugins/app-with-backend
 			// - ./provisioning:/etc/grafana/provisioning
-			file.NewSource("/etc/grafana/provisioning"),
+			file.NewSource(configFile),
 		),
 	)
 	defer c.Close()
 	if err := c.Load(); err != nil {
-		panic(err)
+		logger.Error(err.Error())
+		os.Exit(1)
 	}
 
-	var dc conf.Data
-	if err := c.Scan(&dc); err != nil {
-		panic(err)
+	logger.Info("Config file loded successful:", configFile)
+
+	var bs conf.Bootstrap
+	if err := c.Scan(&bs); err != nil {
+		logger.Error(err.Error())
+		os.Exit(1)
 	}
 
-	var cc conf.Chat
-	if err := c.Scan(&cc); err != nil {
-		panic(err)
-	}
-	router, cleanup, err := wireApp(&dc, &cc, l.DefaultLogger)
+	router, cleanup, err := wireApp(bs.Data, bs.Chat, bs.Rag, logger)
 	if err != nil {
-		panic(err)
+		logger.Error(err.Error())
+		os.Exit(1)
 	}
 	defer cleanup()
 

@@ -30,9 +30,9 @@ api:
 		   --openapi_out=fq_schema_naming=true,default_response=false:. \
            $(API_PROTO_FILES)
 
-.PHONY: proto
-# generate internal proto struct
-proto:
+.PHONY: config
+# generate internal config proto struct
+config:
 	cd $(CONF_PATH) && protoc --proto_path=$(CONF_PATH) \
            --proto_path=$(ROOT_DIR)/third_party \
            --go_out=paths=source_relative:. \
@@ -48,11 +48,19 @@ wire:
 generate:
 	go generate ./...
 
+.PHONY: build-frontend
+# build-frontend
+build-frontend:
+	npm run build
+
+.PHONY: build-backend
+# build-backend
+build-backend:
+	mage -v
+
 .PHONY: build
 # build
-build:
-	npm run build
-	mage -v
+build: build-frontend build-backend
 
 .PHONY: test
 # test
@@ -66,7 +74,7 @@ run:
 
 .PHONY: all
 # generate all
-all: api proto wire generate build run
+all: api config wire generate build run
 
 # show help
 help:

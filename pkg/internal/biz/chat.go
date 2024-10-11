@@ -10,7 +10,7 @@ type ChatRepo interface {
 	GetChatPromptsFromText(ctx context.Context, text string) ([]*Propmpt, error)
 }
 
-type ChatUsercase struct {
+type ChatUsecase struct {
 	repo ChatRepo
 	log  l.Logger
 }
@@ -19,13 +19,13 @@ type Propmpt struct {
 	Text string
 }
 
-func NewChatUsercase(repo ChatRepo, logger l.Logger) *ChatUsercase {
-	return &ChatUsercase{
+func NewChatUsecase(repo ChatRepo, logger l.Logger) *ChatUsecase {
+	return &ChatUsecase{
 		repo: repo,
 		log:  logger,
 	}
 }
 
-func (uc *ChatUsercase) GetChatPromptsFromText(ctx context.Context, text string) ([]*Propmpt, error) {
+func (uc *ChatUsecase) GetChatPromptsFromText(ctx context.Context, text string) ([]*Propmpt, error) {
 	return uc.repo.GetChatPromptsFromText(ctx, text)
 }

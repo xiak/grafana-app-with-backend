@@ -10,14 +10,28 @@ import (
 var ProviderSet = wire.NewSet(NewCopilotService)
 
 type CopilotService struct {
-	ouc *biz.SystemSecurityUsercase
-	log l.Logger
+	cuc  *biz.ChatUsecase
+	ouc  *biz.SystemSecurityUsercase
+	ruc  *biz.RagUsecase
+	hauc *biz.HostActivityUsecase
+	hsuc *biz.HostStateUsecase
+	log  l.Logger
 }
 
 // NewObservabilityService is provider for CopilotService, and need biz.CopilotService
-func NewCopilotService(ouc *biz.SystemSecurityUsercase, logger l.Logger) *CopilotService {
+func NewCopilotService(
+	ouc *biz.SystemSecurityUsercase,
+	cuc *biz.ChatUsecase,
+	ruc *biz.RagUsecase,
+	hauc *biz.HostActivityUsecase,
+	hsuc *biz.HostStateUsecase,
+	logger l.Logger) *CopilotService {
 	return &CopilotService{
-		ouc: ouc,
-		log: logger,
+		cuc:  cuc,
+		ouc:  ouc,
+		ruc:  ruc,
+		hauc: hauc,
+		hsuc: hsuc,
+		log:  logger,
 	}
 }
