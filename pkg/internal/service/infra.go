@@ -30,13 +30,12 @@ func (s *CopilotService) GetHostsActivity(ctx context.Context, req *v1.GetHostsA
 
 func (s *CopilotService) GetHostsState(ctx context.Context, req *v1.GetHostsStateRequest) (*v1.GetHostsStateReply, error) {
 	hs, err := s.hsuc.GetHostsState(ctx, req.StartTime, req.EndTime)
-	s.log.Error("===>", hs)
 	if err != nil {
 		return nil, err
 	}
 	hostsState := make([]*v1.HostState, 0)
 	for _, h := range hs {
-		s.log.Error("===>", h)
+
 		hostsState = append(hostsState, &v1.HostState{
 			RecordId:    h.Id,
 			Timestamp:   h.Time,
@@ -49,5 +48,62 @@ func (s *CopilotService) GetHostsState(ctx context.Context, req *v1.GetHostsStat
 	return &v1.GetHostsStateReply{
 		Domain:     "system_status",
 		HostsState: hostsState,
+	}, nil
+}
+
+func (s *CopilotService) GetNetworkError(ctx context.Context, req *v1.GetNetworkErrorRequest) (*v1.GetNetworkErrorReply, error) {
+	nes, err := s.neuc.GetNetworkError(ctx, req.StartTime, req.EndTime)
+	if err != nil {
+		return nil, err
+	}
+	networkError := make([]*v1.NetworkError, 0)
+	for _, n := range nes {
+		networkError = append(networkError, &v1.NetworkError{
+			Timestamp: n.Time,
+			Port:      n.Port,
+			RxDrops:   n.RxDrops,
+			TxDrops:   n.TxDrops,
+			RxErrors:  n.RxErrors,
+			TxErrors:  n.TxErrors,
+		})
+	}
+	return &v1.GetNetworkErrorReply{
+		Domain:       "network_error",
+		NetworkError: networkError,
+	}, nil
+}
+
+func (s *CopilotService) GetCpuState(ctx context.Context, req *v1.GetCpuStateRequest) (*v1.GetCpuStateReply, error) {
+	data, err := s.cpuuc.GetCpuState(ctx, req.StartTime, req.EndTime)
+	if err != nil {
+		return nil, err
+	}
+	cpuUsage := make([]*v1.CpuUsage, 0)
+
+	for _, d := range data.Usage {
+		cpuUsage = append(cpuUsage, &v1.CpuUsage{
+			AppName: d.AppName,
+			Usage:   d.Usage,
+		})
+	}
+	return &v1.GetCpuStateReply{
+		Domain: "cpu_status",
+		CpuState: &v1.CpuState{
+			CpuUtilization: &v1.CpuUtilization{
+				Server: data.Util.Server,
+				AverageUtilization: &v1.AverageUtilization{
+					Value: data.Util.AverageUtilization.Value,
+				},
+				PeakUtilization: &v1.PeakUtilization{
+					Value: data.Util.PeakUtilization.Value,
+					Time:  data.Util.PeakUtilization.Time,
+				},
+				BreakdownUtilization: &v1.BreakdownUtilization{
+					UserTime:   data.Util.BreakdownUtilization.UserTime,
+					SystemTime: data.Util.BreakdownUtilization.SystemTime,
+				},
+			},
+			CpuUsage: cpuUsage,
+		},
 	}, nil
 }

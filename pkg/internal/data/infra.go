@@ -14,6 +14,8 @@ import (
 
 var _ biz.HostActivityRepo = (*hostActivityRepo)(nil)
 var _ biz.HostStateRepo = (*hostStateRepo)(nil)
+var _ biz.NetworkErrorRepo = (*networkErrorRepo)(nil)
+var _ biz.CpuStateRepo = (*cpuStateRepo)(nil)
 
 type hostActivityRepo struct {
 	data *Data
@@ -21,6 +23,16 @@ type hostActivityRepo struct {
 }
 
 type hostStateRepo struct {
+	data *Data
+	log  l.Logger
+}
+
+type networkErrorRepo struct {
+	data *Data
+	log  l.Logger
+}
+
+type cpuStateRepo struct {
 	data *Data
 	log  l.Logger
 }
@@ -106,4 +118,91 @@ func (repo *hostStateRepo) GetHostsState(ctx context.Context, start int64, end i
 	}
 	repo.log.Error("===========================>", hs)
 	return hs, nil
+}
+
+func NewNetworkErrorRepo(data *Data, logger l.Logger) biz.NetworkErrorRepo {
+	return &networkErrorRepo{
+		data: data,
+		log:  logger,
+	}
+}
+
+func (repo *networkErrorRepo) GetNetworkError(ctx context.Context, start int64, end int64) ([]*biz.NetworkError, error) {
+	timeFormat := "2006-01-02_15:04:05"
+	startTime := time.Unix(start, 0)
+	endTime := time.Unix(end, 0)
+	if endTime.Before(startTime) {
+		return nil, fmt.Errorf("the starttime [%s] is greater than endtime [%s]", startTime.Format(timeFormat), endTime.Format(timeFormat))
+	}
+	// Fake data for test
+	count := 20
+	ports := []string{"Eth1/0/1", "Eth1/0/2"}
+	ne := make([]*biz.NetworkError, 0)
+	var tmpTime int64
+	for i := 0; i < count; i++ {
+		tmpTime = start
+		start = start + 1
+		startTime := time.Unix(start, 0)
+		if startTime.Before(endTime) {
+			start = tmpTime
+		}
+		ne = append(ne, &biz.NetworkError{
+			Time:     time.Unix(start, 0).Format(timeFormat),
+			Port:     ports[rand.Intn(len(ports)-1)],
+			RxDrops:  int64(rand.Intn(50)),
+			TxDrops:  int64(rand.Intn(50)),
+			RxErrors: int64(rand.Intn(15)),
+			TxErrors: int64(rand.Intn(15)),
+		})
+	}
+	return ne, nil
+}
+
+func NewCpuStateRepo(data *Data, logger l.Logger) biz.CpuStateRepo {
+	return &cpuStateRepo{
+		data: data,
+		log:  logger,
+	}
+}
+
+func (repo *cpuStateRepo) GetCpuState(ctx context.Context, start int64, end int64) (*biz.CpuState, error) {
+	timeFormat := "2006-01-02_15:04:05"
+	startTime := time.Unix(start, 0)
+	endTime := time.Unix(end, 0)
+	if endTime.Before(startTime) {
+		return nil, fmt.Errorf("the starttime [%s] is greater than endtime [%s]", startTime.Format(timeFormat), endTime.Format(timeFormat))
+	}
+	cu := []*biz.CpuUsage{
+		{
+			AppName: "app.jar",
+			Usage:   "70%",
+		},
+		{
+			AppName: "nginx",
+			Usage:   "15%",
+		},
+		{
+			AppName: "mysql",
+			Usage:   "10%",
+		},
+	}
+	rt := &biz.CpuState{
+		Util: &biz.CpuUtilization{
+			Server: "app-server-01",
+			AverageUtilization: &biz.CpuAverageUtilization{
+				Value: "95%",
+			},
+			PeakUtilization: &biz.CpuPeakUtilization{
+				Value: "98%",
+				Time:  "15:00",
+			},
+			BreakdownUtilization: &biz.CpuBreakdownUtilization{
+				UserTime:   "85%",
+				SystemTime: "15%",
+			},
+		},
+		Usage: cu,
+	}
+	repo.log.Error("=============", rt)
+	return rt, nil
 }

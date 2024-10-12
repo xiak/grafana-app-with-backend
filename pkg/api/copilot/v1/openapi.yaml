@@ -6,6 +6,24 @@ info:
     title: Copilot API
     version: 0.0.1
 paths:
+    /copilot/obs/cpu/state:
+        post:
+            tags:
+                - Copilot
+            operationId: Copilot_GetCpuState
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/ads.service.copilot.v1.GetCpuStateRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/ads.service.copilot.v1.GetCpuStateReply'
     /copilot/obs/hosts/activity:
         post:
             tags:
@@ -42,6 +60,24 @@ paths:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/ads.service.copilot.v1.GetHostsStateReply'
+    /copilot/obs/network/error:
+        post:
+            tags:
+                - Copilot
+            operationId: Copilot_GetNetworkError
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/ads.service.copilot.v1.GetNetworkErrorRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/ads.service.copilot.v1.GetNetworkErrorReply'
     /copilot/prompt/suggestion:
         post:
             tags:
@@ -127,6 +163,60 @@ components:
                 online:
                     type: string
                     description: Online time
+        ads.service.copilot.v1.AverageUtilization:
+            type: object
+            properties:
+                value:
+                    type: string
+        ads.service.copilot.v1.BreakdownUtilization:
+            type: object
+            properties:
+                userTime:
+                    type: string
+                systemTime:
+                    type: string
+        ads.service.copilot.v1.CpuState:
+            type: object
+            properties:
+                cpuUtilization:
+                    $ref: '#/components/schemas/ads.service.copilot.v1.CpuUtilization'
+                cpuUsage:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/ads.service.copilot.v1.CpuUsage'
+        ads.service.copilot.v1.CpuUsage:
+            type: object
+            properties:
+                appName:
+                    type: string
+                usage:
+                    type: string
+        ads.service.copilot.v1.CpuUtilization:
+            type: object
+            properties:
+                server:
+                    type: string
+                averageUtilization:
+                    $ref: '#/components/schemas/ads.service.copilot.v1.AverageUtilization'
+                peakUtilization:
+                    $ref: '#/components/schemas/ads.service.copilot.v1.PeakUtilization'
+                breakdownUtilization:
+                    $ref: '#/components/schemas/ads.service.copilot.v1.BreakdownUtilization'
+        ads.service.copilot.v1.GetCpuStateReply:
+            type: object
+            properties:
+                domain:
+                    type: string
+                cpuState:
+                    $ref: '#/components/schemas/ads.service.copilot.v1.CpuState'
+        ads.service.copilot.v1.GetCpuStateRequest:
+            type: object
+            properties:
+                startTime:
+                    type: string
+                endTime:
+                    type: string
+            description: GetCpuState
         ads.service.copilot.v1.GetHostsActivityReply:
             type: object
             properties:
@@ -161,6 +251,23 @@ components:
                 endTime:
                     type: string
             description: GetHostsState
+        ads.service.copilot.v1.GetNetworkErrorReply:
+            type: object
+            properties:
+                domain:
+                    type: string
+                networkError:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/ads.service.copilot.v1.NetworkError'
+        ads.service.copilot.v1.GetNetworkErrorRequest:
+            type: object
+            properties:
+                startTime:
+                    type: string
+                endTime:
+                    type: string
+            description: GetNetworkError
         ads.service.copilot.v1.GetRagKeywordsReply:
             type: object
             properties:
@@ -233,6 +340,28 @@ components:
                 message:
                     type: string
                     description: Directory Access Message
+        ads.service.copilot.v1.NetworkError:
+            type: object
+            properties:
+                timestamp:
+                    type: string
+                port:
+                    type: string
+                rxDrops:
+                    type: string
+                txDrops:
+                    type: string
+                rxErrors:
+                    type: string
+                txErrors:
+                    type: string
+        ads.service.copilot.v1.PeakUtilization:
+            type: object
+            properties:
+                value:
+                    type: string
+                time:
+                    type: string
         ads.service.copilot.v1.PromptSuggestionReply:
             type: object
             properties:

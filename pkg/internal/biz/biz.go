@@ -4,4 +4,12 @@ import (
 	"github.com/google/wire"
 )
 
-var ProviderSet = wire.NewSet(NewSystemSecurityUsercase, NewChatUsecase, NewHostActivityUsecase, NewHostStateUsecase, NewSystemSecurityUsecase)
+var ProviderSet = wire.NewSet(
+	NewSystemSecurityUsercase,
+	NewChatUsecase,
+	NewHostActivityUsecase,
+	NewHostStateUsecase,
+	NewSystemSecurityUsecase,
+	NewNetworkUsecase,
+	NewCpuStateUsecase,
+)

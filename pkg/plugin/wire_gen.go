@@ -34,7 +34,11 @@ func wireApp(confData *conf.Data, chat *conf.Chat, rag *conf.Rag, logger log.Log
 	hostActivityUsecase := biz.NewHostActivityUsecase(hostActivityRepo, logger)
 	hostStateRepo := data.NewHostStateRepo(dataData, logger)
 	hostStateUsecase := biz.NewHostStateUsecase(hostStateRepo, logger)
-	copilotService := service.NewCopilotService(systemSecurityUsercase, chatUsecase, ragUsecase, hostActivityUsecase, hostStateUsecase, logger)
+	networkErrorRepo := data.NewNetworkErrorRepo(dataData, logger)
+	networkErrorUsecase := biz.NewNetworkUsecase(networkErrorRepo, logger)
+	cpuStateRepo := data.NewCpuStateRepo(dataData, logger)
+	cpuStateUsecase := biz.NewCpuStateUsecase(cpuStateRepo, logger)
+	copilotService := service.NewCopilotService(systemSecurityUsercase, chatUsecase, ragUsecase, hostActivityUsecase, hostStateUsecase, networkErrorUsecase, cpuStateUsecase, logger)
 	httpServer := server.NewHTTPServer(logger, copilotService)
 	router := GetRouter(httpServer)
 	return router, func() {

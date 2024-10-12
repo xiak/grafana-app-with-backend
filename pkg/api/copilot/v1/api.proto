@@ -112,6 +112,68 @@ message GetRagKeywordsReply {
     repeated string keywords = 1;
 }
 
+// GetNetworkError
+message GetNetworkErrorRequest {
+    int64 start_time = 1;
+    int64 end_time = 2;
+}
+
+message GetNetworkErrorReply {
+    string domain = 1;
+    repeated NetworkError network_error = 2;
+}
+
+message NetworkError {
+    string timestamp = 1;
+    string port = 2;
+    int64 rx_drops = 3;
+    int64 tx_drops = 4;
+    int64 rx_errors = 5;
+    int64 tx_errors = 6;
+}
+
+// GetCpuState
+message GetCpuStateRequest {
+    int64 start_time = 1;
+    int64 end_time = 2;
+}
+
+message GetCpuStateReply {
+    string domain = 1;
+    CpuState cpu_state = 2;
+}
+
+message CpuState {
+    CpuUtilization cpu_utilization = 1;
+    repeated CpuUsage cpu_usage = 2;
+}
+
+message CpuUtilization {
+    string server = 1;
+    AverageUtilization average_utilization = 2;
+    PeakUtilization peak_utilization = 3;
+    BreakdownUtilization breakdown_utilization = 4;
+}
+
+message AverageUtilization {
+    string value = 1;
+}
+
+message PeakUtilization {
+    string value = 1;
+    string time = 2;
+}
+
+message BreakdownUtilization {
+    string user_time = 1;
+    string system_time = 2;
+}
+
+message CpuUsage {
+    string app_name = 1;
+    string usage = 2;
+}
+
 service Copilot {
   rpc PromptSuggestion (PromptSuggestionRequest) returns (PromptSuggestionReply) {
     option (google.api.http) = {
@@ -144,6 +206,20 @@ service Copilot {
   rpc GetRagKeywords (GetRagKeywordsRequest) returns (GetRagKeywordsReply) {
     option (google.api.http) = {
       post: "/copilot/rag/search/keyword"
+      body: "*"
+    };
+  }
+
+  rpc GetNetworkError (GetNetworkErrorRequest) returns (GetNetworkErrorReply) {
+    option (google.api.http) = {
+      post: "/copilot/obs/network/error"
+      body: "*"
+    };
+  }
+
+  rpc GetCpuState (GetCpuStateRequest) returns (GetCpuStateReply) {
+    option (google.api.http) = {
+      post: "/copilot/obs/cpu/state"
       body: "*"
     };
   }
