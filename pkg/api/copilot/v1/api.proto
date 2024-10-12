@@ -6,6 +6,7 @@ import "google/api/annotations.proto";
 
 option go_package = "github.com/xiak/grafana-app-with-backend/copilot/v1;v1";
 
+// Domain: Security
 // GetSecurityAbnormalUser
 message GetSecurityAbnormalUserRequest {
     int64 start_time = 1;
@@ -45,6 +46,7 @@ message Journal {
 	  string message = 3;
 }
 
+// Domain: Security
 // PromptSuggestion
 message PromptSuggestionRequest {
     // input text
